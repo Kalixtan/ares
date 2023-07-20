@@ -136,7 +136,7 @@ auto GameBoy::analyze(vector<u8>& rom) -> string {
     break;
 
   case 0x08: // ROM+RAM
-    mapper = "MBC0"; // this correct?
+    //no mapper
     ram = true;
     break;
 
@@ -224,7 +224,7 @@ auto GameBoy::analyze(vector<u8>& rom) -> string {
     rumble = true;
     break;
 
-  case 0x20:
+  case 0x20: // MBC6
     mapper = "MBC6";
     flash = true;
     battery = true;
@@ -239,8 +239,9 @@ auto GameBoy::analyze(vector<u8>& rom) -> string {
     rumble = true;
     break;
 
-  case 0xfc: // POCKET CAMERA
+  case 0xfc: // POCKET CAMERA // TODO
     mapper = "CAMERA";
+    ram = true;
     break;
 
   case 0xfd: // Bandai TAMA5
