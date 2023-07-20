@@ -105,117 +105,119 @@ auto GameBoy::analyze(vector<u8>& rom) -> string {
   string mapper;
 
   switch(read(0x0147)) {
-  case 0x00:
+  case 0x00: // ROM
     //no mapper
     break;
 
-  case 0x01:
+  case 0x01: // MBC1
     mapper = "MBC1";
     break;
 
-  case 0x02:
+  case 0x02: // MBC1+RAM
     mapper = "MBC1";
     ram = true;
     break;
 
-  case 0x03:
+  case 0x03: // MBC1+RAM+BATTERY
     mapper = "MBC1";
     battery = true;
     ram = true;
     break;
 
-  case 0x05:
+  case 0x05: // MBC2
     mapper = "MBC2";
     ram = true;
     break;
 
-  case 0x06:
+  case 0x06: // MBC2+BATTERY
     mapper = "MBC2";
     battery = true;
     ram = true;
     break;
 
-  case 0x08:
-    mapper = "MBC0";
+  case 0x08: // ROM+RAM
+    mapper = "MBC0"; // this correct?
     ram = true;
     break;
 
-  case 0x09:
+  case 0x09: // ROM+RAM+BATTERY
     mapper = "MBC0";
     battery = true;
     ram = true;
     break;
 
-  case 0x0b:
+  case 0x0b: // MMM01
     mapper = "MMM01";
     break;
 
-  case 0x0c:
+  case 0x0c: // MMM01+RAM
     mapper = "MMM01";
     ram = true;
     break;
 
-  case 0x0d:
+  case 0x0d: // MMM01+RAM+BATTERY
     mapper = "MMM01";
     battery = true;
     ram = true;
     break;
 
-  case 0x0f:
+  case 0x0f: // MBC3+TIMER+BATTERY
     mapper = "MBC3";
     battery = true;
     rtc = true;
     break;
 
-  case 0x10:
+  case 0x10: // MBC3+TIMER+RAM+BATTERY
+    // NOTE: Mani 4-in-1 Tetris Set uses value 0x10 as well, so detect the one cart using this mapper via game name
     mapper = "MBC3";
     battery = true;
     ram = true;
     rtc = true;
     break;
 
-  case 0x11:
+  case 0x11: // MBC3
+    // NOTE: Mani 4-in-1 put 0x11 there as well even though it uses MMM01. So if MMM01 was already detected by readHeader, don't override that
     mapper = "MBC3";
     break;
 
-  case 0x12:
+  case 0x12: // MBC3+RAM
     mapper = "MBC3";
     ram = true;
     break;
 
-  case 0x13:
+  case 0x13: // MBC3+RAM+BATTERY
     mapper = "MBC3";
     battery = true;
     ram = true;
     break;
 
-  case 0x19:
+  case 0x19: // MBC5
     mapper = "MBC5";
     break;
 
-  case 0x1a:
+  case 0x1a: // MBC5+RAM
     mapper = "MBC5";
     ram = true;
     break;
 
-  case 0x1b:
+  case 0x1b: // MBC5+RAM+BATTERY
     mapper = "MBC5";
     battery = true;
     ram = true;
     break;
 
-  case 0x1c:
+  case 0x1c: // MBC5+RUMBLE
     mapper = "MBC5";
     rumble = true;
     break;
 
-  case 0x1d:
+  case 0x1d: // MBC5+RUMBLE+RAM
     mapper = "MBC5";
     ram = true;
     rumble = true;
     break;
 
-  case 0x1e:
+  case 0x1e: // MBC5+RUMBLE+RAM+BATTERY
     mapper = "MBC5";
     battery = true;
     ram = true;
@@ -229,7 +231,7 @@ auto GameBoy::analyze(vector<u8>& rom) -> string {
     ram = true;
     break;
 
-  case 0x22:
+  case 0x22: // MBC7+SENSOR+RUMBLE+RAM+BATTERY
     mapper = "MBC7";
     battery = true;
     eeprom = true;
@@ -237,22 +239,23 @@ auto GameBoy::analyze(vector<u8>& rom) -> string {
     rumble = true;
     break;
 
-  case 0xfc:
+  case 0xfc: // POCKET CAMERA
     mapper = "CAMERA";
     break;
 
-  case 0xfd:
+  case 0xfd: // Bandai TAMA5
     mapper = "TAMA";
     battery = true;
     ram = true;
     rtc = true;
     break;
 
-  case 0xfe:
+  case 0xfe: // Hudson HuC-3
     mapper = "HuC3";
+    battery = true;
     break;
 
-  case 0xff:
+  case 0xff: // Hudson HuC-1+RAM+BATTERY
     mapper = "HuC1";
     battery = true;
     ram = true;
