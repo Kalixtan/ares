@@ -18,7 +18,7 @@ auto CPU::load(Node::Object parent) -> void {
 
   node = parent->append<Node::Object>("CPU");
 
-  if(Model::GameBoy()) {
+  if(Model::GameBoy() || Model::MegaDuck()) {
     version = node->append<Node::Setting::String>("Version", "DMG-CPU B");
     version->setAllowedValues({
       "DMG-CPU",

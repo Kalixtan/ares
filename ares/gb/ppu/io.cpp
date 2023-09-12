@@ -2,18 +2,7 @@ auto PPU::vramAddress(n13 address) const -> n16 {
   return status.vramBank << 13 | address;
 }
 
-auto PPU::readIO(u32 cycle, n16 address, n8 data) -> n8 {
-  if(address >= 0x8000 && address <= 0x9fff && cycle == 2) {
-    if(!canAccessVRAM()) return data;
-    return vram[vramAddress(address)];
-  }
-
-  if(address >= 0xfe00 && address <= 0xfe9f && cycle == 2) {
-    if(!canAccessOAM()) return data;
-    return oam[(n8)address];
-  }
-
-  if(address < 0xff40 || address > 0xff7f) return data;
+auto PPU::readPPU(u32 cycle, n16 address, n8 data) -> n8 {
 
   if(address == 0xff40 && cycle == 2) {  //LCDC
     data.bit(0) = status.bgEnable;
@@ -91,51 +80,39 @@ auto PPU::readIO(u32 cycle, n16 address, n8 data) -> n8 {
     return status.wx;
   }
 
-  if(Model::GameBoyColor() && cpu.status.cgbMode)
-  if(address == 0xff4f && cycle == 2) {  //VBK
-    return status.vramBank;
-  }
 
-  if(Model::GameBoyColor())
-  if(address == 0xff68 && cycle == 2) {  //BGPI
-    data.bit(0,5) = status.bgpi;
-    data.bit(7)   = status.bgpiIncrement;
-    return data;
-  }
+  if(Model::GameBoyColor()){
+	  if(cpu.status.cgbMode)
+	  if(address == 0xff4f && cycle == 2) {  //VBK
+		return status.vramBank;
+	  }
+  
+	  if(address == 0xff68 && cycle == 2) {  //BGPI
+		data.bit(0,5) = status.bgpi;
+		data.bit(7)   = status.bgpiIncrement;
+		return data;
+	  }
 
-  if(Model::GameBoyColor() && ((!cpu.status.cgbMode && cartridge.bootromEnable) || cpu.status.cgbMode))
-  if(address == 0xff69 && cycle == 2) {  //BGPD
-    return bgpd[status.bgpi >> 1].byte(status.bgpi & 1);
-  }
+	  if(((!cpu.status.cgbMode && cartridge.bootromEnable) || cpu.status.cgbMode))
+	  if(address == 0xff69 && cycle == 2) {  //BGPD
+		return bgpd[status.bgpi >> 1].byte(status.bgpi & 1);
+	  }
 
-  if(Model::GameBoyColor())
-  if(address == 0xff6a && cycle == 2) {  //OBPI
-    data.bit(0,5) = status.obpi;
-    data.bit(7)   = status.obpiIncrement;
-    return data;
-  }
+	  if(address == 0xff6a && cycle == 2) {  //OBPI
+		data.bit(0,5) = status.obpi;
+		data.bit(7)   = status.obpiIncrement;
+		return data;
+	  }
 
-  if(Model::GameBoyColor() && ((!cpu.status.cgbMode && cartridge.bootromEnable) || cpu.status.cgbMode))
-  if(address == 0xff6b && cycle == 2) {  //OBPD
-    return obpd[status.obpi >> 1].byte(status.obpi & 1);
-  }
-
+	  if((!cpu.status.cgbMode && cartridge.bootromEnable) || cpu.status.cgbMode)
+	  if(address == 0xff6b && cycle == 2) {  //OBPD
+		return obpd[status.obpi >> 1].byte(status.obpi & 1);
+	  }
+	}
   return data;
 }
 
-auto PPU::writeIO(u32 cycle, n16 address, n8 data) -> void {
-  if(address >= 0x8000 && address <= 0x9fff && cycle == 2) {
-    vram[vramAddress(address)] = data;
-    return;
-  }
-
-  if(address >= 0xfe00 && address <= 0xfe9f && cycle == 2) {
-    if(status.dmaActive && status.dmaClock >= 8) return;
-    oam[(n8)address] = data;
-    return;
-  }
-
-  if(address < 0xff40 || address > 0xff7f) return;
+auto PPU::writePPU(u32 cycle, n16 address, n8 data) -> void {
 
   if(address == 0xff40 && cycle == 4) {  //LCDC
     if(status.displayEnable != data.bit(7)) {
@@ -266,5 +243,65 @@ auto PPU::writeIO(u32 cycle, n16 address, n8 data) -> void {
   if(address == 0xff6b && cycle == 2) {  //OBPD
     obpd[status.obpi >> 1].byte(status.obpi & 1) = data;
     if(status.obpiIncrement) status.obpi++;
+  }
+}
+
+
+auto PPU::readIO(u32 cycle, n16 address, n8 data) -> n8 {
+  if(address >= 0x8000 && address <= 0x9fff && cycle == 2) {
+    if(!canAccessVRAM()) return data;
+    return vram[vramAddress(address)];
+  }
+
+  if(address >= 0xfe00 && address <= 0xfe9f && cycle == 2) {
+    if(!canAccessOAM()) return data;
+    return oam[(n8)address];
+  }
+  
+  if ( Model::MegaDuck() ){ // MegaDuck's remapping
+	if(address < 0xff10 || address > 0xff1f) return data;
+	if ((address & 0x0C) && ((address & 0x0C) ^ 0x0C)){
+		address ^= 0x0C;
+	}
+	
+    data = readPPU( cycle, address-48, data);
+    data = ((data & 0x80) >> 7) | ((data & 0x01) << 7) | //  bit twiddling (TODO: Verify)
+           ((data & 0x20) >> 4) | ((data & 0x10) >> 2) |
+           ((data & 0x40) >> 1) | ((data & 0x08) << 1) |
+           ((data & 0x04) << 2) | ((data & 0x02) << 4);
+    
+  } else {
+	if(address < 0xff40 || address > 0xff7f) return data;
+    data = readPPU( cycle, address, data);
+  }
+
+  return data;
+}
+
+auto PPU::writeIO(u32 cycle, n16 address, n8 data) -> void {
+  if(address >= 0x8000 && address <= 0x9fff && cycle == 2) {
+    vram[vramAddress(address)] = data;
+    return;
+  }
+
+  if(address >= 0xfe00 && address <= 0xfe9f && cycle == 2) {
+    if(status.dmaActive && status.dmaClock >= 8) return;
+    oam[(n8)address] = data;
+    return;
+  }
+  
+  if ( Model::MegaDuck() ){ // MegaDuck's remapping
+	if (address == 0){
+		address = ((data & 0x80) >> 7) | ((data & 0x20) >> 4) | //  bit twiddling (TODO: Verify)
+			   ((data & 0x08) >> 1) | ((data & 0x04) << 2) |
+			   ((data & 0x02) << 4) | ((data & 0x01) << 6) |
+			   ((data & 0x40) >> 3) | ((data & 0x10) << 1);
+	} else {
+		address ^= 0x0C;
+	}
+    writePPU( cycle, address-48, data);
+    
+  } else {
+    writePPU( cycle, address, data);
   }
 }

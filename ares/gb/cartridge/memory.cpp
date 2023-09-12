@@ -3,7 +3,7 @@ auto Cartridge::read(u32 cycle, n16 address, n8 data) -> n8 {
     return data;
   }
 
-  if(!transferPak && bootromEnable) {
+  if(!transferPak && !Model::MegaDuck() && bootromEnable) {
     if(address >= 0x0000 && address <= 0x00ff && cycle == 2) {
       return system.bootROM.read(address);
     }

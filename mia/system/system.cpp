@@ -5,6 +5,7 @@ namespace Systems {
   #include "famicom.cpp"
   #include "game-boy.cpp"
   #include "game-boy-color.cpp"
+  #include "mega-duck.cpp"
   #include "game-boy-advance.cpp"
   #include "master-system.cpp"
   #include "game-gear.cpp"
@@ -41,6 +42,7 @@ auto System::create(string name) -> shared_pointer<Pak> {
   if(name == "Famicom") return new Systems::Famicom;
   if(name == "Game Boy") return new Systems::GameBoy;
   if(name == "Game Boy Color") return new Systems::GameBoyColor;
+  if(name == "MegaDuck") return new Systems::MegaDuck;
   if(name == "Game Boy Advance") return new Systems::GameBoyAdvance;
   if(name == "Master System") return new Systems::MasterSystem;
   if(name == "Game Gear") return new Systems::GameGear;

@@ -21,14 +21,14 @@ auto PPU::load(Node::Object parent) -> void {
 
   node = parent->append<Node::Object>("PPU");
 
-  if(Model::GameBoy() || Model::GameBoyColor()) {
+  if(Model::GameBoy() || Model::MegaDuck() || Model::GameBoyColor()) {
     screen = node->append<Node::Video::Screen>("Screen", 160, 144);
     screen->setViewport(0, 0, 160, 144);
     screen->setSize(160, 144);
     screen->setScale(1.0, 1.0);
     screen->setAspect(1.0, 1.0);
 
-    if(Model::GameBoy()) {
+    if(Model::GameBoy() || Model::MegaDuck()) {
       screen->colors(1 << 2, {&PPU::colorGameBoy, this});
       screen->setFillColor(0);
 

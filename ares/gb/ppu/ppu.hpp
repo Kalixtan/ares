@@ -47,7 +47,9 @@ struct PPU : Thread {
 
   //io.cpp
   auto vramAddress(n13 address) const -> n16;
+  auto readPPU(u32 cycle, n16 address, n8 data) -> n8;
   auto readIO(u32 cycle, n16 address, n8 data) -> n8;
+  auto writePPU(u32 cycle, n16 address, n8 data) -> void;
   auto writeIO(u32 cycle, n16 address, n8 data) -> void;
 
   //dmg.cpp

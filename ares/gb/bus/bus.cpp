@@ -6,7 +6,7 @@ Bus bus;
 
 auto Bus::read(u32 cycle, n16 address, n8 data) -> n8 {
   data &= cpu.readIO(cycle, address, data);
-  data &= apu.readIO(cycle, address, data);
+  //data &= apu.readIO(cycle, address, data);
   data &= ppu.readIO(cycle, address, data);
   data &= cartridge.read(cycle, address, data);
   return data;
@@ -14,7 +14,7 @@ auto Bus::read(u32 cycle, n16 address, n8 data) -> n8 {
 
 auto Bus::write(u32 cycle, n16 address, n8 data) -> void {
   cpu.writeIO(cycle, address, data);
-  apu.writeIO(cycle, address, data);
+  //apu.writeIO(cycle, address, data);
   ppu.writeIO(cycle, address, data);
   cartridge.write(cycle, address, data);
 }

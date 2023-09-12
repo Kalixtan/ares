@@ -29,6 +29,7 @@ struct System {
   enum class Model : u32 {
     GameBoy,
     GameBoyColor,
+    MegaDuck,
     SuperGameBoy,
   };
   Memory::Readable<n8> bootROM;
@@ -66,4 +67,5 @@ extern SuperGameBoyInterface* superGameBoy;
 
 auto Model::GameBoy() -> bool { return system.model() == System::Model::GameBoy; }
 auto Model::GameBoyColor() -> bool { return system.model() == System::Model::GameBoyColor; }
+auto Model::MegaDuck() -> bool { return system.model() == System::Model::MegaDuck; }
 auto Model::SuperGameBoy() -> bool { return system.model() == System::Model::SuperGameBoy; }

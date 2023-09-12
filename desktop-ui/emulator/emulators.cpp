@@ -34,6 +34,7 @@ namespace ares::Atari2600 {
   }
   #include "game-boy.cpp"
   #include "game-boy-color.cpp"
+  #include "mega-duck.cpp"
 #endif
 
 #ifdef CORE_GBA
@@ -201,6 +202,7 @@ auto Emulator::construct() -> void {
   #ifdef CORE_GB
   emulators.append(new GameBoy);
   emulators.append(new GameBoyColor);
+  emulators.append(new MegaDuck);
   #endif
 
   #ifdef CORE_GBA

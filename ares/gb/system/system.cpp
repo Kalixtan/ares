@@ -6,6 +6,7 @@ auto enumerate() -> vector<string> {
   return {
     "[Nintendo] Game Boy",
     "[Nintendo] Game Boy Color",
+    "[Nintendo] MegaDuck",
     "[Nintendo] Super Game Boy",
   };
 }
@@ -51,12 +52,28 @@ auto System::load(Node::System& root, string name) -> bool {
     information.name = "Game Boy Color";
     information.model = Model::GameBoyColor;
   }
+  if(name.find("MegaDuck")) {
+    information.name = "MegaDuck";
+    information.model = Model::MegaDuck;
+  }
   if(name.find("Super Game Boy")) {
     information.name = "Super Game Boy";
     information.model = Model::SuperGameBoy;
   }
+  print(information.name);
+  print(information.name);
+  print(information.name);
+  print(information.name);
+  print(information.name);
+  print(information.name);
+  print(information.name);
+  print(information.name);
+  print(information.name);
+  print(information.name);
+  print(information.name);
+  print(information.name);
 
-  if(information.name == "Game Boy" || information.name == "Game Boy Color") {
+  if(information.name == "Game Boy" || information.name == "Game Boy Color" || information.name == "MegaDuck") {
     node = Node::System::create(information.name);
     node->setGame({&System::game, this});
     node->setRun({&System::run, this});
@@ -105,6 +122,10 @@ auto System::power(bool reset) -> void {
 
   string name = "boot.rom";
 
+  if(GameBoy::Model::MegaDuck()) {
+    bootROM.allocate(1);
+	  // MegaDuck has no BIOS
+  }
   if(GameBoy::Model::GameBoy()) {
     bootROM.allocate(256);
     if(cpu.version->latch() == "DMG-CPU"   ) name = "boot.dmg-0.rom";
@@ -130,7 +151,8 @@ auto System::power(bool reset) -> void {
     if(cpu.version->latch() == "CPU CGB E" ) name = "boot.cgb-1.rom";
   }
 
-  if(auto fp = pak->read(!GameBoy::Model::SuperGameBoy() ? "boot.rom" : "sm83.boot.rom")) {
+ 
+  if( auto fp = pak->read(!GameBoy::Model::SuperGameBoy() ? "boot.rom" : "sm83.boot.rom")) {
     bootROM.load(fp);
 
     if(fastBoot->latch()) {
