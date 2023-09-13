@@ -20,6 +20,13 @@ namespace ares::Atari2600 {
   #include "myvision.cpp"
 #endif
 
+#ifdef CORE_PV1000
+  namespace ares::PV1000 {
+    auto load(Node::System& node, string name) -> bool;
+  }
+  #include "pv1000.cpp"
+#endif
+
 #ifdef CORE_FC
   namespace ares::Famicom {
     auto load(Node::System& node, string name) -> bool;
@@ -170,6 +177,10 @@ auto Emulator::construct() -> void {
 
   #ifdef CORE_MYVISION
   emulators.append(new MyVision);
+  #endif
+
+  #ifdef CORE_PV1000
+  emulators.append(new PV1000);
   #endif
 
   #ifdef CORE_MSX

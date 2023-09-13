@@ -4,6 +4,7 @@ namespace Media {
   #include "atari-2600.cpp"
   #include "colecovision.cpp"
   #include "myvision.cpp"
+  #include "pv1000.cpp"
   #include "famicom.cpp"
   #include "famicom-disk-system.cpp"
   #include "game-boy.cpp"
@@ -46,6 +47,7 @@ auto Medium::create(string name) -> shared_pointer<Pak> {
   if(name == "Atari 2600") return new Media::Atari2600;
   if(name == "ColecoVision") return new Media::ColecoVision;
   if(name == "MyVision") return new Media::MyVision;
+  if(name == "PV-1000") return new Media::PV1000;
   if(name == "Famicom") return new Media::Famicom;
   if(name == "Famicom Disk System") return new Media::FamicomDiskSystem;
   if(name == "Game Boy") return new Media::GameBoy;

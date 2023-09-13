@@ -81,6 +81,10 @@ ifneq ($(filter $(cores),myvision),)
   include $(ares.path)/myvision/GNUmakefile
 endif
 
+ifneq ($(filter $(cores),pv1000),)
+  include $(ares.path)/pv1000/GNUmakefile
+endif
+
 ifneq ($(filter $(cores),gb),)
   include $(ares.path)/gb/GNUmakefile
 endif
