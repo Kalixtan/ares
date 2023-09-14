@@ -20,6 +20,13 @@ namespace ares::Atari2600 {
   #include "myvision.cpp"
 #endif
 
+#ifdef CORE_BBCBC
+  namespace ares::BBC_Bridge_Companion {
+    auto load(Node::System& node, string name) -> bool;
+  }
+  #include "bbcbc.cpp"
+#endif
+
 #ifdef CORE_FC
   namespace ares::Famicom {
     auto load(Node::System& node, string name) -> bool;
@@ -170,6 +177,10 @@ auto Emulator::construct() -> void {
 
   #ifdef CORE_MYVISION
   emulators.append(new MyVision);
+  #endif
+
+  #ifdef CORE_BBCBC
+  emulators.append(new BBC_Bridge_Companion);
   #endif
 
   #ifdef CORE_MSX

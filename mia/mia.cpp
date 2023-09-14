@@ -80,6 +80,7 @@ auto construct() -> void {
   media.append("BS Memory");
   media.append("ColecoVision");
   media.append("MyVision");
+  media.append("BBC Bridge Companion");
   media.append("Famicom");
   media.append("Famicom Disk System");
   media.append("Game Boy");

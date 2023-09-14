@@ -2,6 +2,7 @@ namespace Systems {
   #include "atari-2600.cpp"
   #include "colecovision.cpp"
   #include "myvision.cpp"
+  #include "bbcbc.cpp"
   #include "famicom.cpp"
   #include "game-boy.cpp"
   #include "game-boy-color.cpp"
@@ -38,6 +39,7 @@ auto System::create(string name) -> shared_pointer<Pak> {
   if(name == "Atari 2600") return new Systems::Atari2600;
   if(name == "ColecoVision") return new Systems::ColecoVision;
   if(name == "MyVision") return new Systems::MyVision;
+  if(name == "BBC Bridge Companion") return new Systems::BBC_Bridge_Companion;
   if(name == "Famicom") return new Systems::Famicom;
   if(name == "Game Boy") return new Systems::GameBoy;
   if(name == "Game Boy Color") return new Systems::GameBoyColor;
