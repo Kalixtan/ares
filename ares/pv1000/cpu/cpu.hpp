@@ -39,19 +39,14 @@ struct CPU : Z80, Z80::Bus, Thread {
   auto in(n16 address) -> n8 override;
   auto out(n16 address, n8 data) -> void override;
   
-  auto controller_read(n16 address) -> n8;
+  auto controller_read(n16 address, u8 port) -> n8;
 
   //serialization.cpp
   auto serialize(serializer&) -> void;
   
   
   //////
-  n8 fd_data;
-  n8 buffer_flag;
   n8 io[8] = {0};
-  
-  n8 joy_test; // for test use only
-  
   
 
 private:

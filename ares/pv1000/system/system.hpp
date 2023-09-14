@@ -21,7 +21,7 @@ struct System {
   } controls;
 
   auto name() const -> string { return information.name; }
-  auto frequency() const -> f64 { return 17897725; }
+  auto frequency() const -> f64 { return 17897727; }
   
   //system.cpp
   auto game() -> string;
