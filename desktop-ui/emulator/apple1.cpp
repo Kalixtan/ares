@@ -1,16 +1,19 @@
-struct PV1000: Emulator {
-  PV1000();
+struct Apple1: Emulator {
+  Apple1();
   auto load() -> bool override;
   auto save() -> bool override;
   auto pak(ares::Node::Object) -> shared_pointer < vfs::directory > override;
 };
 
-PV1000::PV1000() {
-  manufacturer = "Casio";
-  name = "PV-1000";
+Apple1::Apple1() {
+  manufacturer = "Apple";
+  name = "Apple 1";
+  
+  firmware.append({"BIOS", "Wozmon", "e5af0d1c4057bd8e0ef5cb069c208ff7cc0984a7dff53b12c5cf119de8cb5c25"});
+  
   {
     InputPort port {
-      "PV-1000"
+      "Apple 1"
     }; {
       InputDevice device {
         "Controls"
@@ -32,15 +35,15 @@ PV1000::PV1000() {
   }
 }
 
-auto PV1000::load() -> bool {
-  game = mia::Medium::create("PV-1000");
+auto Apple1::load() -> bool {
+  game = mia::Medium::create("Apple 1");
   if (!game -> load(Emulator::load(game, configuration.game))) return false;
 
-  system = mia::System::create("PV-1000");
-  if(!system->load()) return false;
+  system = mia::System::create("Apple 1");
+  if(!system->load(firmware[0].location)) return errorFirmware(firmware[0]), false;
 
-  if (!ares::PV1000::load(root, {
-      "[Casio] PV-1000"
+  if (!ares::Apple1::load(root, {
+      "[Apple] Apple 1"
     })) return false;
 
   if (auto port = root -> find < ares::Node::Port > ("Cartridge Slot")) {
@@ -51,15 +54,15 @@ auto PV1000::load() -> bool {
   return true;
 }
 
-auto PV1000::save() -> bool {
+auto Apple1::save() -> bool {
   root -> save();
   system -> save(system -> location);
   game -> save(game -> location);
   return true;
 }
 
-auto PV1000::pak(ares::Node::Object node) -> shared_pointer < vfs::directory > {
-  if (node -> name() == "PV-1000") return system -> pak;
-  if (node -> name() == "PV-1000 Cartridge") return game -> pak;
+auto Apple1::pak(ares::Node::Object node) -> shared_pointer < vfs::directory > {
+  if (node -> name() == "Apple 1") return system -> pak;
+  if (node -> name() == "Apple 1 Cartridge") return game -> pak;
   return {};
 }

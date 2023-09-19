@@ -32,7 +32,7 @@ auto System::unserialize(serializer& s) -> bool {
   if(signature != SerializerSignature) return false;
   if(string{version} != SerializerVersion) return false;
 
-  if(synchronize) power();
+  if(synchronize) power(/* reset = */ false);
   serialize(s, synchronize);
   return true;
 }
@@ -42,4 +42,6 @@ auto System::serialize(serializer& s, bool synchronize) -> void {
   s(cartridge);
   s(cpu);
   s(vdp);
+  s(controllerPort1);
+  s(controllerPort2);
 }

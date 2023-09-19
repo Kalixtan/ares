@@ -1,19 +1,16 @@
+extern Random random;
+
 struct System {
   Node::System node;
   VFS::Pak pak;
 
   struct Controls {
     Node::Object node;
-    Node::Input::Button Select;
-    Node::Input::Button Start;
-    
-    Node::Input::Button A;
-    Node::Input::Button B;
-    
-    Node::Input::Button Up;
-    Node::Input::Button Down;
-    Node::Input::Button Left;
-    Node::Input::Button Right;
+    Node::Input::Button reset;
+    Node::Input::Button select;
+    Node::Input::Button leftDifficulty;
+    Node::Input::Button rightDifficulty;
+    Node::Input::Button tvType;
 
     //controls.cpp
     auto load(Node::Object) -> void;
@@ -21,8 +18,8 @@ struct System {
   } controls;
 
   auto name() const -> string { return information.name; }
-  auto frequency() const -> f64 { return 17897727; }
-  
+  auto frequency() const -> f64 { return information.frequency; }
+
   //system.cpp
   auto game() -> string;
   auto run() -> void;
@@ -30,15 +27,18 @@ struct System {
   auto load(Node::System& node, string name) -> bool;
   auto save() -> void;
   auto unload() -> void;
-  auto power(bool reset = false) -> void;
+  auto power(bool reset) -> void;
 
   //serialization.cpp
   auto serialize(bool synchronize) -> serializer;
   auto unserialize(serializer&) -> bool;
 
+  u8 bios[0x2000];
+  
 private:
   struct Information {
-    string name = "PV-1000";
+    string name = "Apple 1";
+    f64 frequency = 3579546;
   } information;
 
   //serialization.cpp

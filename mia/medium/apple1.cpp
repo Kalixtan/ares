@@ -1,13 +1,13 @@
 
-struct PV1000 : Cartridge {
-  auto name() -> string override { return "PV-1000"; }
+struct Apple1 : Cartridge {
+  auto name() -> string override { return "Apple 1"; }
   auto extensions() -> vector<string> override { return {"pv1"}; }
   auto load(string location) -> bool override;
   auto save(string location) -> bool override;
   auto analyze(vector<u8>& rom) -> string;
 };
 
-auto PV1000::load(string location) -> bool {
+auto Apple1::load(string location) -> bool {
   vector<u8> rom;
   if(directory::exists(location)) {
     append(rom, {location, "program.rom"});
@@ -29,13 +29,13 @@ auto PV1000::load(string location) -> bool {
   return true;
 }
 
-auto PV1000::save(string location) -> bool {
+auto Apple1::save(string location) -> bool {
   auto document = BML::unserialize(manifest);
 
   return true;
 }
 
-auto PV1000::analyze(vector<u8>& rom) -> string {
+auto Apple1::analyze(vector<u8>& rom) -> string {
   string s;
   s += "game\n";
   s +={"  name:  ", Medium::name(location), "\n"};

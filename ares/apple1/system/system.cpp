@@ -1,10 +1,10 @@
-#include <pv1000/pv1000.hpp>
+#include <apple1/apple1.hpp>
 
-namespace ares::PV1000 {
+namespace ares::Apple1 {
 
 auto enumerate() -> vector<string> {
   return {
-    "[Casio] PV-1000",
+    "[Apple] Apple 1",
   };
 }
 
@@ -13,6 +13,7 @@ auto load(Node::System& node, string name) -> bool {
   return system.load(node, name);
 }
 
+Random random;
 Scheduler scheduler;
 System system;
 #include "controls.cpp"
@@ -28,16 +29,14 @@ auto System::game() -> string {
 
 auto System::run() -> void {
   scheduler.enter();
-  controls.poll();
 }
 
 auto System::load(Node::System& root, string name) -> bool {
   if(node) unload();
 
   information = {};
-  if(name.find("PV-1000")) {
-    information.name = "PV-1000";
-  }
+  information.name = "Apple 1";
+  information.frequency = 3579546;
 
   node = Node::System::create(information.name);
   node->setGame({&System::game, this});
@@ -50,11 +49,17 @@ auto System::load(Node::System& root, string name) -> bool {
   root = node;
   if(!node->setPak(pak = platform->pak(node))) return false;
 
+  if(auto fp = pak->read("bios.rom")) {
+    fp->read({bios, 0x2000});
+  }
+  
   scheduler.reset();
   controls.load(node);
   cpu.load(node);
   vdp.load(node);
   cartridgeSlot.load(node);
+  controllerPort1.load(node);
+  controllerPort2.load(node);
   return true;
 }
 
@@ -69,15 +74,18 @@ auto System::unload() -> void {
   cpu.unload();
   vdp.unload();
   cartridgeSlot.unload();
+  controllerPort1.unload();
+  controllerPort2.unload();
   pak.reset();
-  node.reset();
+  node = {};
 }
 
 auto System::power(bool reset) -> void {
   for(auto& setting : node->find<Node::Setting::Setting>()) setting->setLatch();
 
+  random.entropy(Random::Entropy::Low);
   cartridge.power();
-  cpu.power();
+  cpu.power(reset);
   vdp.power();
   scheduler.power(cpu);
 }
