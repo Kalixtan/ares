@@ -50,6 +50,10 @@ auto System::load(Node::System& root, string name) -> bool {
   root = node;
   if(!node->setPak(pak = platform->pak(node))) return false;
 
+  if(auto fp = pak->read("bios.rom")) {
+    fp->read({bios, 0x2000});
+  }
+  
   scheduler.reset();
   controls.load(node);
   cpu.load(node);

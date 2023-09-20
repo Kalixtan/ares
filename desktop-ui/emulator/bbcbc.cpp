@@ -8,6 +8,9 @@ struct BBC_Bridge_Companion: Emulator {
 BBC_Bridge_Companion::BBC_Bridge_Companion() {
   manufacturer = "Unicard";
   name = "BBC Bridge Companion";
+  
+  firmware.append({"BIOS", "World", "990bf1956f10207d8781b619eb74f89b00d921c8d45c95c334c16c8cceca09ad"});
+  
   {
     InputPort port {
       "BBC Bridge Companion"
@@ -45,9 +48,9 @@ BBC_Bridge_Companion::BBC_Bridge_Companion() {
 auto BBC_Bridge_Companion::load() -> bool {
   game = mia::Medium::create("BBC Bridge Companion");
   if (!game -> load(Emulator::load(game, configuration.game))) return false;
-
+  
   system = mia::System::create("BBC Bridge Companion");
-  if(!system->load()) return false;
+  if(!system->load(firmware[0].location)) return errorFirmware(firmware[0]), false;
 
   if (!ares::BBC_Bridge_Companion::load(root, {
       "[Unicard] BBC Bridge Companion"

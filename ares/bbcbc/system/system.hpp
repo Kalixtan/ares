@@ -43,6 +43,8 @@ struct System {
   //serialization.cpp
   auto serialize(bool synchronize) -> serializer;
   auto unserialize(serializer&) -> bool;
+  
+  u8 bios[0x2000];
 
 private:
   struct Information {

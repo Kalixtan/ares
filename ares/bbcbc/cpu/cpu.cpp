@@ -8,7 +8,7 @@ CPU cpu;
 #include "serialization.cpp"
 
 auto CPU::load(Node::Object parent) -> void {
-  ram.allocate(0x10000);
+  ram.allocate(0x8000);
 
   node = parent->append<Node::Object>("CPU");
 

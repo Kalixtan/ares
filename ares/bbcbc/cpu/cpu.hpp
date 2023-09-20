@@ -38,6 +38,8 @@ struct CPU : Z80, Z80::Bus, Thread {
 
   auto in(n16 address) -> n8 override;
   auto out(n16 address, n8 data) -> void override;
+  
+  n8 m_input_select;
 
   //serialization.cpp
   auto serialize(serializer&) -> void;

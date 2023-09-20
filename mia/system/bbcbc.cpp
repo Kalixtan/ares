@@ -5,10 +5,12 @@ struct BBC_Bridge_Companion : System {
 };
 
 auto BBC_Bridge_Companion::load(string location) -> bool {
+  auto bios = Pak::read(location);
+  if(!bios) return false;
 
   this->location = locate();
   pak = new vfs::directory;
-
+  pak->append("bios.rom", bios);
   return true;
 }
 
