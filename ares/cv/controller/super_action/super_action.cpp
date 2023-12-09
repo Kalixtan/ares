@@ -74,8 +74,8 @@ auto SuperActionController::read() -> n8 {
     else if(zero->value ()) data.bit(0,3) = 0b1010;
     else if(pound->value()) data.bit(0,3) = 0b0110;
     
-    else if(x->value ()) data.bit(0,3) = 0x04;
-    else if(y->value()) data.bit(0,3) = 0x08;
+    else if(x->value    ()) data.bit(0,3) = 0b0100;
+    else if(y->value    ()) data.bit(0,3) = 0b1000;
     data.bit(6) = !r->value();
   } else {
     data.bit(0) = !upLatch;
@@ -83,6 +83,16 @@ auto SuperActionController::read() -> n8 {
     data.bit(2) = !downLatch;
     data.bit(3) = !leftLatch;
     data.bit(6) = !l->value();
+    
+    
+    if (joy_status & 0x80){
+	  data ^= 0x30;
+    } else if (joy_status){
+	  data ^= 0x10;
+	}
+    
+    
+    
   }
   return data;
 }

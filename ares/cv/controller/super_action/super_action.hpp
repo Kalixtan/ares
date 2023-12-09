@@ -27,6 +27,7 @@ struct SuperActionController : Controller {
   auto write(n8 data) -> void override;
 
   n1 select;
+  n8 joy_status;
 
 private:
   b1 yHold;
