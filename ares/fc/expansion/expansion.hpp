@@ -42,3 +42,4 @@ struct Expansion {
 #include "port.hpp"
 #include "epsm/epsm.hpp"
 #include "family-keyboard/family-keyboard.hpp"
+#include "3d_glasses/3d_glasses.hpp"
