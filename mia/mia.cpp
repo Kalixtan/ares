@@ -93,6 +93,7 @@ auto construct() -> void {
   media.push_back("MyVision");
   media.push_back("Famicom");
   media.push_back("Famicom Disk System");
+  media.push_back("Famicom Network Card");
   media.push_back("Game Boy");
   media.push_back("Game Boy Color");
   media.push_back("Game Boy Advance");

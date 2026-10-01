@@ -20,6 +20,7 @@ target_sources(
     medium/bs-memory.cpp
     medium/colecovision.cpp
     medium/famicom-disk-system.cpp
+    medium/famicom-network-card.cpp
     medium/famicom.cpp
     medium/game-boy-advance.cpp
     medium/game-boy-color.cpp

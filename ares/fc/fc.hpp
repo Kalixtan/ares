@@ -5,6 +5,7 @@
 #include <vector>
 
 #include <component/processor/mos6502/mos6502.hpp>
+#include <component/processor/w65c02s/w65c02s.hpp>
 #include <component/audio/ym2149/ym2149.hpp>
 #include <component/audio/ym2413/ym2413.hpp>
 #include <component/eeprom/m24c/m24c.hpp>
@@ -15,6 +16,7 @@ namespace ares::Famicom {
   #include <ares/inline.hpp>
   auto enumerate() -> std::vector<string>;
   auto load(Node::System& node, string name) -> bool;
+  auto option(string name, string value) -> bool;
 
   struct Region {
     static inline auto NTSCJ() -> bool;
@@ -32,4 +34,5 @@ namespace ares::Famicom {
   #include <fc/apu/apu.hpp>
   #include <fc/ppu/ppu.hpp>
   #include <fc/fds/fds.hpp>
+  #include <fc/fcns/fcns.hpp>
 }

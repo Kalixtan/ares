@@ -9,3 +9,4 @@
 #include <fc/apu/apu.cpp>
 #include <fc/ppu/ppu.cpp>
 #include <fc/fds/fds.cpp>
+#include <fc/fcns/fcns.cpp>

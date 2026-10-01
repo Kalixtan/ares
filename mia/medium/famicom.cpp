@@ -1,10 +1,11 @@
 struct Famicom : Cartridge {
   auto name() -> string override { return "Famicom"; }
-  auto extensions() -> std::vector<string> override { return {"fc", "nes", "unf", "unif", "unh"}; }
+  auto extensions() -> std::vector<string> override { return {"fc", "nes", "unf", "unif", "unh", "fcnbios"}; }
   auto load(string location) -> LoadResult override;
   auto save(string location) -> bool override;
   auto analyze(std::vector<u8>& rom) -> string;
   auto analyzeFDS(std::vector<u8>& data) -> string;
+  auto analyzeFCNSBios(std::vector<u8>& data) -> string;
   auto analyzeINES(std::vector<u8>& data) -> string;
   auto analyzeUNIF(std::vector<u8>& data) -> string;
 };
@@ -109,6 +110,17 @@ auto Famicom::analyze(std::vector<u8>& data) -> string {
 
   if(data.size() == 8_KiB) {
     return analyzeFDS(data);
+  }
+
+  //Famicom Network System adapter BIOS: RF5A18 CPU2 internal ROM (8KB) followed immediately by
+  //the LH5323M1 Kanji ROM (256KB), concatenated. Identified by the "AWANO" signature immediately
+  //preceding CPU2's vector table at the end of its ROM image, the same way analyzeFDS() above
+  //identifies its BIOS by a fixed string rather than a database hash: this blob is assembled from
+  //two separate dumps, so there is no single canonical file with a known hash.
+  if(data.size() == 0x2000 + 0x40000
+  && data[0x1ff0] == 'A' && data[0x1ff1] == 'W' && data[0x1ff2] == 'A'
+  && data[0x1ff3] == 'N' && data[0x1ff4] == 'O') {
+    return analyzeFCNSBios(data);
   }
 
   if(data[0] == 'N' && data[1] == 'E' && data[2] == 'S' && data[3] == 0x1a) {
@@ -983,5 +995,24 @@ auto Famicom::analyzeUNIF(std::vector<u8>& data) -> string {
   std::ranges::copy(programROM, std::back_inserter(data));
   std::ranges::copy(characterROM, std::back_inserter(data));
 
+  return s;
+}
+
+//Famicom Network System adapter BIOS (RF5A18 CPU2 ROM + LH5323M1 Kanji ROM, concatenated)
+auto Famicom::analyzeFCNSBios(std::vector<u8>& data) -> string {
+  string s;
+  s += "game\n";
+  s +={"  name:   ", Medium::name(location), "\n"};
+  s +={"  title:  ", Medium::name(location), "\n"};
+  s += "  region: NTSC-J\n";
+  s += "  board:  nintendo/fcns-bios\n";
+  s += "    memory\n";
+  s += "      type: ROM\n";
+  s += "      size: 0x2000\n";
+  s += "      content: Program\n";
+  s += "    memory\n";
+  s += "      type: ROM\n";
+  s += "      size: 0x40000\n";
+  s += "      content: Option\n";
   return s;
 }

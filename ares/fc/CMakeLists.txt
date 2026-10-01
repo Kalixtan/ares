@@ -1,5 +1,6 @@
 ares_components(
   mos6502
+  w65c02s
   ym2149
   ym2413
   m24c
@@ -23,6 +24,7 @@ ares_add_sources(
     apu/apu.cpp
     ppu/ppu.cpp
     fds/fds.cpp
+    fcns/fcns.cpp
 )
 
 ares_add_sources(CORE fc INCLUDED fc.hpp CMakeLists.txt)
@@ -136,6 +138,7 @@ ares_add_sources(
     cartridge/board/unl-txc.cpp
     cartridge/board/unrom-512.cpp
     cartridge/board/vs-unisystem.cpp
+    cartridge/board/nintendo-fcns-bios.cpp
 )
 
 ares_add_sources(
@@ -222,6 +225,8 @@ ares_add_sources(
     expansion/family-keyboard/family-keyboard.hpp
     expansion/family-keyboard/famicom-data-recorder.cpp
     expansion/family-keyboard/famicom-data-recorder.hpp
+    expansion/network-controller/network-controller.cpp
+    expansion/network-controller/network-controller.hpp
 )
 
 ares_add_sources(
@@ -235,6 +240,13 @@ ares_add_sources(
     fds/fds.hpp
     fds/serialization.cpp
     fds/timer.cpp
+    fcns/cpu2.cpp
+    fcns/fcns.hpp
+    fcns/link.cpp
+    fcns/msm6827.cpp
+    fcns/serialization.cpp
+    fcns/socket.cpp
+    fcns/uart.cpp
     fds/timer.hpp
 )
 

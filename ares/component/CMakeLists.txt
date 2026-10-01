@@ -270,6 +270,21 @@ component_sources(
 )
 component_sources(
   COMPONENT
+    w65c02s
+  PRIMARY
+    processor/w65c02s/w65c02s.cpp
+  INCLUDED
+    processor/w65c02s/addresses.cpp
+    processor/w65c02s/algorithms.cpp
+    processor/w65c02s/disassembler.cpp
+    processor/w65c02s/instruction.cpp
+    processor/w65c02s/instructions.cpp
+    processor/w65c02s/memory.cpp
+    processor/w65c02s/serialization.cpp
+    processor/w65c02s/w65c02s.hpp
+)
+component_sources(
+  COMPONENT
     sh2
   PRIMARY
     processor/sh2/sh2.cpp

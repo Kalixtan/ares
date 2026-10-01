@@ -43,3 +43,4 @@ struct Expansion {
 #include "port.hpp"
 #include "epsm/epsm.hpp"
 #include "family-keyboard/family-keyboard.hpp"
+#include "network-controller/network-controller.hpp"

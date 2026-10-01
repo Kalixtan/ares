@@ -26,6 +26,9 @@ auto Cartridge::connect() -> void {
   if(fds.present) {
     fds.load(node);
   }
+  if(fcns.present) {
+    fcnsCard.load(node);
+  }
 }
 
 auto Cartridge::disconnect() -> void {
@@ -33,6 +36,9 @@ auto Cartridge::disconnect() -> void {
   if(fds.present) {
     fds.unload();
     fds.present = 0;
+  }
+  if(fcns.present) {
+    fcns.unload();
   }
   board->unload();
   board->pak.reset();

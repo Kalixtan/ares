@@ -1,0 +1,20 @@
+auto WDC65C02S::serialize(serializer& s) -> void {
+  s(BCD);
+  s(A);
+  s(X);
+  s(Y);
+  s(S);
+  s(P.c);
+  s(P.z);
+  s(P.i);
+  s(P.d);
+  s(P.b);
+  s(P.u);
+  s(P.v);
+  s(P.n);
+  s(PC);
+  s(MAR);
+  s(MDR);
+  s(waiting);
+  s(stopped);
+}

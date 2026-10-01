@@ -60,6 +60,7 @@ namespace Board {
 #include "unrom-512.cpp"
 #include "vs/board.cpp"
 #include "vs-unisystem.cpp"
+#include "nintendo-fcns-bios.cpp"
 
 #include "unl-bmc.cpp"
 #include "unl-jy.cpp"
@@ -137,6 +138,7 @@ auto Interface::create(string board) -> Interface* {
   if(!p) p = TXC::create(board);
 
   if(!p) p = VsUniSystem::create(board);
+  if(!p) p = NintendoFCNSBios::create(board);
 
   if(!p) p = new Interface;
   return p;

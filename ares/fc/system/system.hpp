@@ -14,7 +14,7 @@ struct System {
     auto poll() -> void;
   } controls;
 
-  enum class Model : u32 { Famicom, VsUniSystem };
+  enum class Model : u32 { Famicom, VsUniSystem, FamicomNetworkSystem };
   enum class Region : u32 { NTSCJ, NTSCU, PAL, Dendy };
 
   auto model()     const -> Model  { return information.model;     }

@@ -8,6 +8,7 @@ namespace Media {
   #include "myvision.cpp"
   #include "famicom.cpp"
   #include "famicom-disk-system.cpp"
+  #include "famicom-network-card.cpp"
   #include "game-boy.cpp"
   #include "game-boy-color.cpp"
   #include "game-boy-advance.cpp"
@@ -54,6 +55,7 @@ auto Medium::create(string name) -> std::shared_ptr<Pak> {
   if(name == "MyVision") return std::make_shared<Media::MyVision>();
   if(name == "Famicom") return std::make_shared<Media::Famicom>();
   if(name == "Famicom Disk System") return std::make_shared<Media::FamicomDiskSystem>();
+  if(name == "Famicom Network Card") return std::make_shared<Media::FamicomNetworkCard>();
   if(name == "Game Boy") return std::make_shared<Media::GameBoy>();
   if(name == "Game Boy Color") return std::make_shared<Media::GameBoyColor>();
   if(name == "Game Boy Advance") return std::make_shared<Media::GameBoyAdvance>();

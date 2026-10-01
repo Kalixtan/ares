@@ -9,6 +9,7 @@ auto enumerate() -> std::vector<string> {
     "[Nintendo] Famicom (NTSC-U)",
     "[Nintendo] Famicom (PAL)",
     "[Nintendo] Vs. UniSystem",
+    "[Nintendo] Famicom Network System",
     "[Dendy] Dendy",
   };
 }
@@ -17,6 +18,14 @@ auto load(Node::System& node, string name) -> bool {
   auto list = enumerate();
   if(std::find(list.begin(), list.end(), name) == list.end()) return false;
   return system.load(node, name);
+}
+
+//"Network Link" points the Famicom Network System's modem at a peer that stands in for the
+//telephone network: either "loopback", or a host:port another process is listening on. Empty
+//leaves the line dead, which is the honest default -- the real service has not answered since 1991.
+auto option(string name, string value) -> bool {
+  if(name == "Network Link") fcns.link.target = value;
+  return true;
 }
 
 Random random;
@@ -74,6 +83,14 @@ auto System::load(Node::System& root, string name) -> bool {
     information.region      = Region::Dendy;
     information.frequency   = Constants::Colorburst::PAL * 6.0;
     information.cpuDivider  = 15;
+  }
+  if(name == "[Nintendo] Famicom Network System") {
+    //Japan-only hardware; no NTSC-U/PAL/Dendy unit ever existed.
+    information.model       = Model::FamicomNetworkSystem;
+    information.name        = "Famicom Network System";
+    information.region      = Region::NTSCJ;
+    information.frequency   = Constants::Colorburst::NTSC * 6.0;
+    information.cpuDivider  = 12;
   }
   if(name == "[Nintendo] Vs. UniSystem") {
     information.model       = Model::VsUniSystem;
