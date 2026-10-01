@@ -36,6 +36,9 @@ auto FCNS::load() -> void {
 
 auto FCNS::unload() -> void {
   link.socket.close();
+  if(node) debugger.unload(node);
+  node = {};
+  if(fcnsCard.port) fcnsCard.unload();
   cpu2.unload();
   cpu2.rom.reset();
   cpu2.ram.reset();

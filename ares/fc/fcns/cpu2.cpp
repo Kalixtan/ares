@@ -180,9 +180,7 @@ auto FCNS::CPU2::write(n16 address, n8 data) -> void {
       break;
     case 0x4100: nmiTimer.reload.byte(0) = data; break;
     case 0x4101: nmiTimer.reload.byte(1) = data; break;
-    case 0x4102:
-      //log every write, arm or stop, with where it came from: the question is whether the chain ends
-      //because CPU2 stopped arming ($00) or because an arm ($02) never fired.
+    case 0x4102: nmiTimer.control(data); break;
     case 0x4104: irqTimer.reload.byte(0) = data; break;
     case 0x4105: irqTimer.reload.byte(1) = data; break;
     case 0x4106: irqTimer.control(data); break;
